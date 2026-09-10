@@ -36,6 +36,27 @@ describe('article stats', () => {
     expect(enabledRecords(article)).toHaveLength(1);
   });
 
+  it('adds every delay into the article total, repeats included', () => {
+    const article = makeArticleFixture({
+      records: [
+        // 3s clip + 2s delay, played twice = 10s
+        makeAudioRecordFixture({ durationSec: 3, delaySec: 2, repeat: 2 }),
+        // 4s clip + 30s delay, played once = 34s
+        makeAudioRecordFixture({ durationSec: 4, delaySec: 30, repeat: 1 }),
+      ],
+    });
+
+    expect(articleDurationSec(article)).toBe(44);
+  });
+
+  it('counts a delay even when the clip itself is silent-short', () => {
+    const article = makeArticleFixture({
+      records: [makeAudioRecordFixture({ durationSec: 0, delaySec: 120, repeat: 1 })],
+    });
+
+    expect(articleDurationSec(article)).toBe(120);
+  });
+
   it('reports zero for an empty article', () => {
     const article = makeArticleFixture();
     expect(articleDurationSec(article)).toBe(0);

@@ -94,3 +94,54 @@ export const LanguageIcon = createIcon({
     </>
   ),
 });
+
+export const ShuffleIcon = createIcon({
+  viewBox: '0 0 24 24',
+  path: (
+    <>
+      <Path d="M16 3h5v5" {...strokeProps} />
+      <Path d="M4 20 21 3" {...strokeProps} />
+      <Path d="M21 16v5h-5" {...strokeProps} />
+      <Path d="M15 15l6 6" {...strokeProps} />
+      <Path d="M4 4l5 5" {...strokeProps} />
+    </>
+  ),
+});
+
+export const CloudIcon = createIcon({
+  viewBox: '0 0 24 24',
+  path: (
+    <Path
+      d="M17.5 19a4.5 4.5 0 0 0 .3-9 6 6 0 0 0-11.6 1.5A3.75 3.75 0 0 0 6.7 19h10.8Z"
+      {...strokeProps}
+    />
+  ),
+});
+
+export const CloudDownloadIcon = createIcon({
+  viewBox: '0 0 24 24',
+  path: (
+    <>
+      <Path
+        d="M17.5 16.5a4.5 4.5 0 0 0 .3-8.5 6 6 0 0 0-11.6 1.5A3.75 3.75 0 0 0 6.7 16.5"
+        {...strokeProps}
+      />
+      <Path d="M12 12v8" {...strokeProps} />
+      <Path d="m8.5 16.5 3.5 3.5 3.5-3.5" {...strokeProps} />
+    </>
+  ),
+});
+
+export const CloudUploadIcon = createIcon({
+  viewBox: '0 0 24 24',
+  path: (
+    <>
+      <Path
+        d="M17.5 18.5a4.5 4.5 0 0 0 .3-8.5 6 6 0 0 0-11.6 1.5A3.75 3.75 0 0 0 6.7 18.5"
+        {...strokeProps}
+      />
+      <Path d="M12 21v-8" {...strokeProps} />
+      <Path d="m8.5 16.5 3.5-3.5 3.5 3.5" {...strokeProps} />
+    </>
+  ),
+});

@@ -1,20 +1,26 @@
 import { articleSizeBytes, useArticles } from '@features/articles';
+import { useCloudArticles } from '@features/sync';
 import { Button, ButtonText } from '@ui/button';
-import { CheckCircleIcon, GlobeIcon, LockIcon } from '@ui/icon';
+import { CheckCircleIcon, GlobeIcon } from '@ui/icon';
 import { Text } from '@ui/text';
 import { VStack } from '@ui/vstack';
 import { useState } from 'react';
 import { ScrollView } from 'react-native';
-import { Screen, SectionLabel, SettingsGroup, SettingsRow } from '@/components/shared';
+import {
+  CloudIcon,
+  Screen,
+  SectionLabel,
+  SettingsGroup,
+  SettingsRow,
+} from '@/components/shared';
+import { useCurrentUser } from '@/stores/auth';
 import { formatBytes, pluralize } from '@/utils/format';
 import { LoginForm } from '../components/login-form';
 import { ProfileCard } from '../components/profile-card';
 import { useSignIn, useSignOut, useSignUp } from '../mutations';
-import { useCurrentUser } from '../store';
 
 /**
  * Signed out this tab is the login form; signed in it is the account summary.
- * Auth is mocked for now — swapping in Firebase touches only `mutations.ts`.
  */
 export function ProfileScreen() {
   const user = useCurrentUser();
@@ -24,6 +30,7 @@ export function ProfileScreen() {
   const signIn = useSignIn();
   const signUp = useSignUp();
   const signOut = useSignOut();
+  const { articles: cloudArticles, ...cloudQuery } = useCloudArticles();
 
   if (!user) {
     const active = mode === 'sign-in' ? signIn : signUp;
@@ -91,12 +98,12 @@ export function ProfileScreen() {
             }
           />
           <SettingsRow
-            label="Cloud sync"
-            description="Arrives with Firebase in a later step"
-            icon={LockIcon}
+            label="In your cloud"
+            description="Open the Articles tab to download them"
+            icon={CloudIcon}
             accessory={
               <Text size="sm" className="text-muted-foreground">
-                Soon
+                {cloudQuery.isPending ? '…' : pluralize(cloudArticles.length, 'article')}
               </Text>
             }
           />

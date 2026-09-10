@@ -1,4 +1,4 @@
-import { useLibraryStore } from '../store';
+import { useLibraryStore } from '@/stores/library';
 import type { Article } from '../types/article';
 
 export function useArticles(): Article[] {

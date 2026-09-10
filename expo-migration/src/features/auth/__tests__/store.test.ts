@@ -1,5 +1,5 @@
+import { useAuthStore } from '@/stores/auth';
 import { makeSessionFixture } from '../__mocks__/auth-factories';
-import { useAuthStore } from '../store';
 import { credentialsSchema } from '../types/user';
 
 beforeEach(() => {

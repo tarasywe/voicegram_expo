@@ -21,6 +21,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   ios: {
     bundleIdentifier: BUNDLE_ID,
     supportsTablet: true,
+    googleServicesFile: './GoogleService-Info.plist',
     infoPlist: {
       NSMicrophoneUsageDescription:
         'Voicegram needs the microphone to record the short audio clips that make up your articles.',
@@ -31,6 +32,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   },
   android: {
     package: BUNDLE_ID,
+    googleServicesFile: './google-services.json',
     predictiveBackGestureEnabled: false,
     adaptiveIcon: {
       backgroundColor: '#0891B2',
@@ -51,6 +53,23 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   },
   plugins: [
     'expo-router',
+    [
+      '@react-native-firebase/app',
+      {
+        // firebase-ios-sdk's SPM products are static libraries, so each
+        // RNFirebase pod would embed its own copy and collide at link time
+        // under `useFrameworks: 'static'`. CocoaPods resolves it once instead.
+        ios: { disableSPM: true },
+      },
+    ],
+    '@react-native-firebase/auth',
+    [
+      'expo-build-properties',
+      {
+        // RNFirebase ships static xcframeworks; CocoaPods needs to match.
+        ios: { useFrameworks: 'static' },
+      },
+    ],
     [
       'expo-splash-screen',
       {

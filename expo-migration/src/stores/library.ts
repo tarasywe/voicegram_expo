@@ -1,3 +1,21 @@
+/**
+ * The on-device library. Lives in `@/stores` rather than inside the articles
+ * feature because the sync feature writes to it too — keeping it here is what
+ * stops `articles` and `sync` importing each other in a cycle.
+ */
+
+import {
+  addRecord,
+  insertRecordAfter,
+  makeArticle,
+  makeRecord,
+  removeRecord,
+  reorderRecords,
+  replaceRecord,
+  touch,
+} from '@features/articles/lib/article-ops';
+import type { Article, AudioRecord } from '@features/articles/types/article';
+import { librarySnapshotSchema } from '@features/articles/types/library';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import {
@@ -9,18 +27,6 @@ import {
 } from '@/lib/audio-files';
 import { zustandStorage } from '@/lib/storage';
 import { makeId } from '@/utils/id';
-import {
-  addRecord,
-  insertRecordAfter,
-  makeArticle,
-  makeRecord,
-  removeRecord,
-  reorderRecords,
-  replaceRecord,
-  touch,
-} from './lib/article-ops';
-import type { Article, AudioRecord } from './types/article';
-import { librarySnapshotSchema } from './types/library';
 
 type NewRecordInput = {
   articleId: string;
@@ -40,6 +46,11 @@ type LibraryState = {
     patch: Partial<Pick<Article, 'randomOrder' | 'loop' | 'isPublic'>>,
   ) => void;
   deleteArticle: (articleId: string) => void;
+
+  /** Inserts (or replaces) an article downloaded from the cloud. */
+  adoptArticle: (article: Article) => void;
+  /** Records that the article now matches what is in the cloud. */
+  markSynced: (articleId: string, syncedAt: number) => void;
 
   saveRecord: (input: NewRecordInput) => string | null;
   updateRecord: (
@@ -70,6 +81,24 @@ export const useLibraryStore = create<LibraryState>()(
         }));
         return id;
       },
+
+      adoptArticle: (article) =>
+        set((state) => {
+          const exists = state.articles.some((entry) => entry.id === article.id);
+          return {
+            articles: exists
+              ? state.articles.map((entry) => (entry.id === article.id ? article : entry))
+              : [article, ...state.articles],
+          };
+        }),
+
+      markSynced: (articleId, syncedAt) =>
+        set((state) => ({
+          articles: applyToArticle(state.articles, articleId, (article) => ({
+            ...article,
+            syncedAt,
+          })),
+        })),
 
       renameArticle: (articleId, name) =>
         set((state) => ({

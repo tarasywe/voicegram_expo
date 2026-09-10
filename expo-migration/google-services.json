@@ -1,0 +1,98 @@
+{
+  "project_info": {
+    "project_number": "360775177213",
+    "firebase_url": "https://react-native-4823e.firebaseio.com",
+    "project_id": "react-native-4823e",
+    "storage_bucket": "react-native-4823e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:360775177213:android:97d2454dea9eef5f823f94",
+        "android_client_info": {
+          "package_name": "com.diec"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "360775177213-e0tt61n4fvqgi7ke40rr5ujk1rskhlqd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCtaoe8LbJAMYlg7XfKGM39-msiwfjLo58"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "360775177213-e0tt61n4fvqgi7ke40rr5ujk1rskhlqd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:360775177213:android:47c5f51640df18df",
+        "android_client_info": {
+          "package_name": "com.voicegram"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "360775177213-e0tt61n4fvqgi7ke40rr5ujk1rskhlqd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCtaoe8LbJAMYlg7XfKGM39-msiwfjLo58"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "360775177213-e0tt61n4fvqgi7ke40rr5ujk1rskhlqd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:360775177213:android:99dcc06691272d08",
+        "android_client_info": {
+          "package_name": "com.voicegram.android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "360775177213-e0tt61n4fvqgi7ke40rr5ujk1rskhlqd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCtaoe8LbJAMYlg7XfKGM39-msiwfjLo58"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "360775177213-e0tt61n4fvqgi7ke40rr5ujk1rskhlqd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

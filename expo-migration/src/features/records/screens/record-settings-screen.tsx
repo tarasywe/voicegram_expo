@@ -123,7 +123,7 @@ export function RecordSettingsScreen({ articleId, recordId }: RecordSettingsScre
                 value={record.delaySec}
                 min={PLAYBACK.minDelaySec}
                 max={PLAYBACK.maxDelaySec}
-                step={PLAYBACK.delayStepSec}
+                options={PLAYBACK.delayOptionsSec}
                 suffix="s"
                 onChange={(delaySec) => updateRecord(articleId, record.id, { delaySec })}
               />

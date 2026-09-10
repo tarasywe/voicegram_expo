@@ -15,10 +15,10 @@ import {
 } from '@/components/shared';
 import { NAMING } from '@/config/constants';
 import { links } from '@/config/links';
+import { useLibraryStore } from '@/stores/library';
 import { formatBytes, formatDuration, pluralize } from '@/utils/format';
 import { useArticle } from '../hooks/use-articles';
 import { articleDurationSec, articleSizeBytes } from '../lib/article-stats';
-import { useLibraryStore } from '../store';
 
 /** Per-article playback flags plus the destructive rename/remove actions. */
 export function ArticleSettingsScreen({ articleId }: { articleId: string }) {
