@@ -63,5 +63,64 @@ STEP 1 — DONE (pending your testing)
 - Firebase auth, sync/upload/download, and the old app's "Shared" tab are NOT in
   step 1 — they are the obvious step 2 candidates.
 
-STEP 2 (to be provided)
+STEP 2 — DONE (pending your testing)
+
+    fixes:
+    - [x] when article is playing, show progress of article, also indicate on article using icons that shuffle or loop is enabled
+
+    new features
+    [x] implement login and logout to firebase using integration email and password
+    [x] integrate project with firebase
     
+    test user creds you can test login flow
+    // userLogin({ email: 'Email4@gmail.com', password: 'Test1234' }); 
+    
+    in root there are google service file for connecting to firebase
+
+    [x] check model implementation in old project. after user is logged in read associated articles for account.
+    then implement download feature. in old project it is implemented by redux-sagas. here we need to chose async implementation, that track progress of downloading previously implemented article
+each article contains data.txt file in root in storage with article configuration.
+for logic of downloading check sagas/article/downloadArticle
+for uploading check syncArticle in the same file
+
+at the end of this step i need to be able upload article by pressing sync in article and download previously synced articles.
+i will see after login my articles on cloud in article screen - they should be marked as not present on device
+
+### Step 2 notes / what to test
+
+Verified live on the iOS simulator against the real Firebase project
+(react-native-4823e), signed in as Email4@gmail.com:
+
+- login / logout through Firebase Auth, session restored on relaunch
+- the five cloud articles listed under "In your cloud", marked as not on device
+- download of "Timer" with live progress, then playback of the downloaded audio
+- duplicate x2, then sync -> upload with live progress
+- delete locally, re-download: 10 records / 88 KB round-tripped intact
+
+Fix after first testing round:
+- Delays were missing from article totals. Two causes, both under-counting:
+  the old app wrote `delay`/`repeat` as Picker STRINGS, and the remote schema's
+  `z.number()` fell through to `.catch(0)`, zeroing every delay; and the delay
+  cap was 60s while the old picker went to 120s. Schema now coerces numbers
+  (with a boolean reader that does not read "false" as true) and the cap is 120s
+  with a preset ladder. ALREADY-DOWNLOADED ARTICLES KEEP THE ZEROED DELAYS —
+  re-download them to pick the real values back up.
+
+Second fix round:
+- Playback now survives leaving the article. A module-level engine
+  (features/player/lib/playback-engine.ts) owns the audio and timers, and the
+  state lives in features/player/store.ts — a hook could not do this, because
+  unmounting the screen would kill the run. A gradient now-playing bar sits
+  above the article list with name, elapsed/total, pause/resume and stop; stop
+  clears the store, which is what makes the bar disappear.
+- Pause is a real pause, not a stop: a run paused mid-silence remembers how much
+  of the delay was left and resumes from there.
+
+Known gaps:
+- ANDROID NEEDS A REBUILD (`npm run prebuild && npm run android`) — RNFirebase
+  and expo-build-properties changed native config; only iOS has been verified.
+- Recording (mic capture) is still unverified on a real device.
+- `deleteRemoteArticle` is implemented but not wired to any UI yet: deleting an
+  article removes it locally only, and it reappears under "In your cloud".
+- Firebase RTDB/Storage security rules are whatever the old project set; not
+  reviewed as part of this step.

@@ -12,10 +12,13 @@ export const PLAYBACK = {
   /** Bounds for the per-record repeat counter. */
   minRepeat: 1,
   maxRepeat: 20,
-  /** Bounds for the per-record delay, in seconds. */
+  /** Bounds for the per-record delay, in seconds. Matches the original app's
+   *  picker, which went up to two minutes. */
   minDelaySec: 0,
-  maxDelaySec: 60,
-  delayStepSec: 1,
+  maxDelaySec: 120,
+  /** The ladder the delay control steps through — a 0-120 range at 1s a tap
+   *  would be unusable. Mirrors the original app's preset list. */
+  delayOptionsSec: [0, 1, 2, 3, 5, 10, 15, 20, 30, 45, 60, 90, 120],
 } as const;
 
 export const NAMING = {

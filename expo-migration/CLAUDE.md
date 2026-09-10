@@ -112,16 +112,42 @@ src/features/articles/      library store + article screens; owns the Article/Au
 src/features/records/       records-inside-an-article screens (list, reorder, per-record settings)
 src/features/recorder/      capture flow (useClipRecorder, RecordingSheet)
 src/features/player/        playback sequencing (buildQueue, useArticlePlayer, useRecordPreview)
-src/features/auth/          mocked email/password auth + profile tab
+src/features/auth/          Firebase email/password auth + profile tab
 src/features/security/      PIN + biometrics + the lock gate
 src/features/settings/      settings hub, appearance, language, about
-src/lib/                    storage (MMKV), device-key, audio-files (FS), query-client
+src/features/sync/          Firebase cloud sync: remote reads, upload, download
+src/stores/                 shared client state (library, auth) — see below
+src/lib/                    storage (MMKV), device-key, audio-files (FS), query-client, firebase
 src/theme/                  theme store, ThemeProvider, navigation theme, palette mirror
 src/utils/                  format, id, array
 ```
 
 Audio files live at `documents/articles/<articleId>/<recordId>.m4a`; the metadata
 that points at them is persisted to MMKV by `src/features/articles/store.ts`.
+
+### Why `src/stores/` exists
+
+`library.ts` and `auth.ts` live there, not inside their features, because a
+second feature writes to / reads them: `sync` needs the library and the uid.
+Putting them in the feature would make `articles`/`auth` and `sync` import each
+other in a cycle. Rule: **client state that more than one feature touches goes
+in `@/stores`.** `sync` imports `@features/articles` type-only, and never
+imports `@features/auth`.
+
+### Firebase
+
+Native SDK (`@react-native-firebase`), configured from `google-services.json` /
+`GoogleService-Info.plist` in the repo root. `ios: { disableSPM: true }` on the
+app plugin is required: firebase-ios-sdk's SPM products are static libraries, so
+under `useFrameworks: 'static'` each RNFirebase pod embeds its own copy and they
+collide at link time.
+
+The remote schema is inherited from the original app and must not be renamed —
+articles synced by it still download. RTDB `users/{uid}/articles/{aid}`,
+`articles/{aid}/records/{rid}`, `records/{rid}`; Storage
+`{uid}/{aid}/records/{rid}`. **The article write replaces the whole row**, so
+`toRemoteArticle` must emit every field the remote shape carries (`shared`
+included) or flags get silently cleared.
 
 ## MAIN FUNCTIONALITY
 

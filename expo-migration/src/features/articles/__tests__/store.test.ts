@@ -1,4 +1,4 @@
-import { useLibraryStore } from '../store';
+import { useLibraryStore } from '@/stores/library';
 
 /**
  * File I/O is mocked: these assertions are about the library's bookkeeping,

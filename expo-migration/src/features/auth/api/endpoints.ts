@@ -1,9 +1,6 @@
 /**
- * Auth endpoints. Firebase Auth replaces the `mock:` scheme in a later step —
- * the paths are kept here so only this file changes when it does.
+ * Auth is handled entirely by the Firebase SDK, which resolves its own
+ * endpoints from the native config files. This file records that so nobody
+ * goes looking for a base URL that does not exist.
  */
-export const authEndpoints = {
-  signIn: 'mock://auth/sign-in',
-  signUp: 'mock://auth/sign-up',
-  signOut: 'mock://auth/sign-out',
-} as const;
+export const authProvider = 'firebase' as const;

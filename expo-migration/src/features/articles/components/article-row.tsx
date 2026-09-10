@@ -1,9 +1,9 @@
 import { HStack } from '@ui/hstack';
-import { ChevronRightIcon, Icon, SettingsIcon } from '@ui/icon';
+import { ChevronRightIcon, Icon, RepeatIcon, SettingsIcon } from '@ui/icon';
 import { Pressable } from '@ui/pressable';
 import { Text } from '@ui/text';
 import { VStack } from '@ui/vstack';
-import { WaveformIcon } from '@/components/shared';
+import { ShuffleIcon, WaveformIcon } from '@/components/shared';
 import { formatBytes, formatDuration, pluralize } from '@/utils/format';
 import { articleDurationSec, articleSizeBytes } from '../lib/article-stats';
 import type { Article } from '../types/article';
@@ -25,7 +25,13 @@ export function ArticleRow({ article, onPress, onSettingsPress }: ArticleRowProp
     <Pressable
       onPress={onPress}
       accessibilityRole="button"
-      accessibilityLabel={`Open ${article.name}`}
+      accessibilityLabel={[
+        `Open ${article.name}`,
+        article.randomOrder ? 'shuffle on' : null,
+        article.loop ? 'loop on' : null,
+      ]
+        .filter(Boolean)
+        .join(', ')}
       className="mx-4 mb-3 rounded-2xl border border-border bg-card data-[active=true]:bg-accent"
     >
       <HStack className="items-center gap-3 p-4">
@@ -34,9 +40,17 @@ export function ArticleRow({ article, onPress, onSettingsPress }: ArticleRowProp
         </VStack>
 
         <VStack className="flex-1 gap-1">
-          <Text size="md" bold isTruncated className="text-foreground">
-            {article.name}
-          </Text>
+          <HStack className="items-center gap-1.5">
+            <Text size="md" bold isTruncated className="flex-shrink text-foreground">
+              {article.name}
+            </Text>
+            {article.randomOrder ? (
+              <Icon as={ShuffleIcon} size="2xs" className="text-primary" />
+            ) : null}
+            {article.loop ? (
+              <Icon as={RepeatIcon} size="2xs" className="text-primary" />
+            ) : null}
+          </HStack>
           <Text size="xs" className="text-muted-foreground">
             {subtitle}
           </Text>

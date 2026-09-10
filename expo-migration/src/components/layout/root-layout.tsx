@@ -1,3 +1,4 @@
+import { useAuthListener } from '@features/auth';
 import { AppLock } from '@features/security';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { ThemeProvider as NavigationThemeProvider, Stack } from 'expo-router';
@@ -41,6 +42,8 @@ export function RootLayout() {
 
 function RootStack() {
   const resolved = useResolvedTheme();
+  // Firebase restores the signed-in user from native storage on launch.
+  useAuthListener();
 
   return (
     <NavigationThemeProvider value={navigationTheme(resolved)}>
@@ -49,6 +52,8 @@ function RootStack() {
         screenOptions={{
           headerShadowVisible: false,
           headerTitleStyle: { fontWeight: '600' },
+          // Without this the back button inherits the route group name, "(tabs)".
+          headerBackButtonDisplayMode: 'minimal',
         }}
       >
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />

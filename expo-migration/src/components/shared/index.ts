@@ -2,11 +2,15 @@ export { ActionFab } from './action-fab';
 export { ConfirmDialog } from './confirm-dialog';
 export { EmptyState } from './empty-state';
 export {
+  CloudDownloadIcon,
+  CloudIcon,
+  CloudUploadIcon,
   FingerprintIcon,
   KeypadIcon,
   LanguageIcon,
   MicIcon,
   PauseIcon,
+  ShuffleIcon,
   StopIcon,
   WaveformIcon,
 } from './icons';

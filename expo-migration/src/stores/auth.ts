@@ -1,7 +1,13 @@
+/**
+ * The signed-in session. Lives in `@/stores` rather than inside the auth
+ * feature because the sync feature reads the uid too — keeping it here is what
+ * stops `auth` and `sync` importing each other in a cycle.
+ */
+
+import { type AuthSession, authSessionSchema } from '@features/auth/types/user';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import { zustandStorage } from '@/lib/storage';
-import { type AuthSession, authSessionSchema } from './types/user';
 
 type AuthState = {
   session: AuthSession | null;

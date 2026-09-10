@@ -2,6 +2,7 @@ import type { AudioRecord } from '@features/articles';
 import { articleDurationSec, useArticle, useLibraryStore } from '@features/articles';
 import { useArticlePlayer } from '@features/player';
 import { RecordingSheet } from '@features/recorder';
+import { SyncArticleButton } from '@features/sync';
 import { Text } from '@ui/text';
 import { VStack } from '@ui/vstack';
 import { useRouter } from 'expo-router';
@@ -71,8 +72,16 @@ export function ArticleRecordsScreen({ articleId }: { articleId: string }) {
         recordCount={article.records.length}
         durationSec={articleDurationSec(article)}
         isPlaying={player.isPlaying}
+        isPaused={player.isPaused}
+        progress={player.progress}
+        elapsedSec={player.elapsedSec}
         onToggle={player.toggle}
+        onStop={player.stop}
       />
+
+      <VStack className="mx-4 mb-4">
+        <SyncArticleButton article={article} />
+      </VStack>
 
       {isFull ? (
         <Text size="xs" className="mx-4 mb-3 text-warning">

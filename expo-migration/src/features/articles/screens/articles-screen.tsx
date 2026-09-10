@@ -1,3 +1,9 @@
+import { NowPlayingBar } from '@features/player';
+import {
+  CloudArticleRow,
+  useCloudOnlyArticles,
+  useDownloadArticle,
+} from '@features/sync';
 import { AddIcon } from '@ui/icon';
 import { Text } from '@ui/text';
 import { VStack } from '@ui/vstack';
@@ -9,14 +15,15 @@ import {
   EmptyState,
   PromptDialog,
   Screen,
+  SectionLabel,
   WaveformIcon,
 } from '@/components/shared';
 import { NAMING } from '@/config/constants';
 import { links } from '@/config/links';
+import { useLibraryStore } from '@/stores/library';
 import { ArticleRow } from '../components/article-row';
 import { LibrarySummary } from '../components/library-summary';
 import { useArticles } from '../hooks/use-articles';
-import { useLibraryStore } from '../store';
 
 /**
  * Home tab. An article is the container everything else hangs off, so this is
@@ -26,6 +33,8 @@ export function ArticlesScreen() {
   const router = useRouter();
   const articles = useArticles();
   const createArticle = useLibraryStore((state) => state.createArticle);
+  const cloudOnly = useCloudOnlyArticles();
+  const download = useDownloadArticle();
   const [isCreating, setIsCreating] = useState(false);
 
   const handleCreate = (name: string) => {
@@ -45,6 +54,9 @@ export function ArticlesScreen() {
         </Text>
       </VStack>
 
+      {/* Above the list, so it stays put while the list scrolls under it. */}
+      <NowPlayingBar onPress={(id) => router.push(links.article(id))} />
+
       {articles.length > 0 ? <LibrarySummary articles={articles} /> : null}
 
       <FlatList
@@ -52,11 +64,13 @@ export function ArticlesScreen() {
         keyExtractor={(article) => article.id}
         contentContainerClassName="pb-32"
         ListEmptyComponent={
-          <EmptyState
-            icon={WaveformIcon}
-            title="No articles yet"
-            description="Create an article first — recordings live inside one."
-          />
+          cloudOnly.length > 0 ? null : (
+            <EmptyState
+              icon={WaveformIcon}
+              title="No articles yet"
+              description="Create an article first — recordings live inside one."
+            />
+          )
         }
         renderItem={({ item }) => (
           <ArticleRow
@@ -65,6 +79,20 @@ export function ArticlesScreen() {
             onSettingsPress={() => router.push(links.articleSettings(item.id))}
           />
         )}
+        ListFooterComponent={
+          cloudOnly.length > 0 ? (
+            <VStack>
+              <SectionLabel>In your cloud</SectionLabel>
+              {cloudOnly.map((article) => (
+                <CloudArticleRow
+                  key={article.id}
+                  article={article}
+                  onDownload={() => download.mutate(article.id)}
+                />
+              ))}
+            </VStack>
+          ) : null
+        }
       />
 
       <ActionFab
